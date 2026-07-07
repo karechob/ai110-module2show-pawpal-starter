@@ -1,14 +1,7 @@
-"""PawPal+ core system classes (SKELETON).
+"""PawPal+ core system classes.
 
 Implements the model from diagrams/uml.mmd.
 Classes: Owner, Pet, Task, Scheduler.
-
-This is a skeleton: signatures, dataclass fields, and docstrings are in
-place, but method bodies are unimplemented. Fill in the `...` / raise
-statements with real logic.
-"""
-
-"""
 """
 
 from __future__ import annotations
@@ -30,7 +23,7 @@ class Task:
 
     def mark_done(self) -> None:
         """Mark this task as completed."""
-        raise NotImplementedError
+        self.completed = True
 
     def edit(
         self,
@@ -40,7 +33,14 @@ class Task:
         priority: int | None = None,
     ) -> None:
         """Update any of this task's editable fields (only non-None values)."""
-        raise NotImplementedError
+        if name is not None:
+            self.name = name
+        if category is not None:
+            self.category = category
+        if duration is not None:
+            self.duration = duration
+        if priority is not None:
+            self.priority = priority
 
 
 @dataclass
@@ -54,11 +54,11 @@ class Pet:
 
     def add_task(self, task: Task) -> None:
         """Add a care task to this pet."""
-        raise NotImplementedError
+        self.tasks.append(task)
 
     def remove_task(self, task_id: str) -> None:
         """Remove a care task from this pet by its id."""
-        raise NotImplementedError
+        self.tasks = [t for t in self.tasks if t.id != task_id]
 
 
 @dataclass
@@ -72,15 +72,15 @@ class Owner:
 
     def add_pet(self, pet: Pet) -> None:
         """Add a pet to this owner."""
-        raise NotImplementedError
+        self.pets.append(pet)
 
     def set_availability(self, minutes: int) -> None:
         """Set how many minutes the owner has available today."""
-        raise NotImplementedError
+        self.minutes_available = minutes
 
     def all_tasks(self) -> list[Task]:
         """Return every task across all of this owner's pets (flattened)."""
-        raise NotImplementedError
+        return [task for pet in self.pets for task in pet.tasks]
 
 
 @dataclass
@@ -102,16 +102,57 @@ class Scheduler:
         ``owner.minutes_available``, and stores the result in ``scheduled``
         and ``skipped``. Returns the scheduled tasks.
         """
-        raise NotImplementedError
+        budget = owner.minutes_available
+        self.scheduled = []
+        self.skipped = []
+
+        # Remember which pet each task belongs to, so the plan can label them.
+        self.pet_by_task = {
+            task.id: pet.name for pet in owner.pets for task in pet.tasks
+        }
+
+        # Only plan tasks that still need doing, most important first.
+        pending = [t for t in owner.all_tasks() if not t.completed]
+        for task in self.prioritize(pending):
+            if task.duration <= budget:
+                self.scheduled.append(task)
+                budget -= task.duration
+            else:
+                self.skipped.append(task)
+
+        return self.scheduled
 
     def prioritize(self, tasks: list[Task]) -> list[Task]:
         """Order tasks by priority (highest first), then by shortest duration.
 
         Ties break toward shorter tasks so more can fit within the budget.
         """
-        raise NotImplementedError
+        return sorted(tasks, key=lambda t: (-t.priority, t.duration))
 
     def explain(self) -> str:
         """Return a human-readable explanation of the last generated plan."""
-        raise NotImplementedError
-    
+        if not self.scheduled and not self.skipped:
+            return "No plan has been generated yet."
+
+        lines: list[str] = []
+        total = sum(t.duration for t in self.scheduled)
+        lines.append(
+            f"Scheduled {len(self.scheduled)} task(s) using {total} minute(s):"
+        )
+        for t in self.scheduled:
+            pet = self.pet_by_task.get(t.id, "?")
+            lines.append(
+                f"  • [{pet}] {t.name} ({t.category}) — {t.duration} min, priority {t.priority}"
+            )
+
+        if self.skipped:
+            lines.append(
+                f"Skipped {len(self.skipped)} task(s) that didn't fit the time budget:"
+            )
+            for t in self.skipped:
+                pet = self.pet_by_task.get(t.id, "?")
+                lines.append(
+                    f"  • [{pet}] {t.name} ({t.category}) — {t.duration} min, priority {t.priority}"
+                )
+
+        return "\n".join(lines)
