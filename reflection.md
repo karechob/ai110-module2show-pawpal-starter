@@ -4,8 +4,7 @@
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+For the three main core actions, we should be able to edit, add, and remove tasks for the pet’s care, and we should also be able to see the pet's daily routine and owner/pet information. For the initial design, I included the classes Owner, Pet, Tasks, Scheduler, and DailyRoutine. The Owner class can edit/view/add a pet and its associated daily tasks. The Pet class includes information/attributes of a pet. The Tasks class includes information about individual tasks. The Scheduler class can manage and track tasks, and the DailyRoutine class keeps track of pets' routines by date.
 
 **b. Design changes**
 
