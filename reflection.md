@@ -8,8 +8,23 @@ For the three main core actions, we should be able to edit, add, and remove task
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+After generating the new diagram using AI, I realized that the DailyRoutine class was redundant and I could just add the attributes to the Scheduler class instead. I also made these changes in the following classes:
+
+*Task class
+Added a unique id field (auto-generated UUID) so tasks can be reliably targeted for edit/remove even as the list changes.
+Widened edit() from just (duration, priority) to also allow updating name and category, with all fields optional (only non-None values change).
+
+*Pet class
+Changed remove_task(task) to remove_task(task_id) — removal now targets a stable id instead of a list position that shifts when items are deleted.
+
+*Owner class
+Made the pets: list[Pet] attribute explicit to realize the "owns" relationship from the UML.
+
+*Scheduler class
+Removed the duplicated time_budget and generic tasks attributes (the time constraint now lives in one place: Owner.minutes_available).
+Added scheduled and skipped result lists so the plan and its leftovers are stored on the object.
+Simplified generate_plan(owner, pet) to generate_plan(owner) — it pulls tasks from all of the owner's pets and reads the time budget from the owner.
+explain() now has stored results (scheduled/skipped) to describe, instead of having nothing to reference.
 
 ---
 
