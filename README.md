@@ -72,8 +72,17 @@ pytest --cov
 
 Sample test output:
 
+Confidence Level 3 stars
 ```
-# Paste your pytest output here
+collecting ... collected 5 items
+
+tests/test_pawpal.py::test_task_completion PASSED                        [ 20%]
+tests/test_pawpal.py::test_task_addition PASSED                          [ 40%]
+tests/test_pawpal.py::test_sort_by_time_is_chronological PASSED          [ 60%]
+tests/test_pawpal.py::test_completing_daily_task_creates_next_days_occurrence PASSED [ 80%]
+tests/test_pawpal.py::test_detect_conflicts_flags_duplicate_times PASSED [100%]
+
+============================== 5 passed in 0.02s ===============================
 ```
 
 ## 📐 Smarter Scheduling
