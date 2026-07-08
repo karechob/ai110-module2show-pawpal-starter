@@ -78,14 +78,25 @@ Sample test output:
 
 ## 📐 Smarter Scheduling
 
-> Fill in once you've implemented scheduling logic.
-
-| Feature | Method(s) | Notes |
-|---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+┌──────────────────┬──────────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Feature          │ Method(s)                                                    │ Description                                                                                                              │
+├──────────────────┼──────────────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Task Sorting     │ • Scheduler.prioritize()                                     │ Orders tasks by highest priority first. If priorities are equal, shorter-duration                                        │
+│                  │ • Scheduler.sort_by_time()                                   │ tasks come first so more tasks fit. sort_by_time() sorts scheduled tasks by                                              │
+│                  │                                                              │ "HH:MM", with unscheduled tasks placed last.                                                                             │
+├──────────────────┼──────────────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Filtering        │ • Scheduler.generate_plan()                                  │ generate_plan() ignores completed tasks and moves tasks that exceed the remaining                                        │
+│                  │ • Scheduler.filter_tasks()                                   │ time budget into the skipped list. filter_tasks() filters tasks by pet name                                              │
+│                  │                                                              │ and/or completion status.                                                                                               │
+├──────────────────┼──────────────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Conflict         │ • Scheduler.detect_conflicts()                               │ Detects overlapping scheduled tasks on the same due_date when one task's                                                 │
+│ Handling         │ • Scheduler.conflict_warnings()                              │ duration extends past the next task's start time. Warnings are advisory only                                             │
+│                  │                                                              │ and list the affected pet(s) and times.                                                                                  │
+├──────────────────┼──────────────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Recurring Tasks  │ • Task.recurring                                             │ Tasks support frequencies of "once", "daily", or "weekly". Completing a recurring                                        │
+│                  │ • Task.next_occurrence()                                     │ task automatically creates its next occurrence with an updated due_date                                                  │
+│                  │ • Pet.mark_task_complete()                                   │ using timedelta, correctly handling month and year rollovers.                                                            │
+└──────────────────┴──────────────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ## 📸 Demo Walkthrough
 
