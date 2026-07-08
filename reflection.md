@@ -33,12 +33,32 @@ explain() now has stored results (scheduled/skipped) to describe, instead of hav
 **a. Constraints and priorities**
 
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
+
+1. Task priority (primary sort key) — In pawpal_system.py:145, prioritize() sorts by -t.priority first. Higher-priority tasks (meds = 5, walk = 5) get placed before low-priority ones (laser play = 1). This is the dominant constraint.
+
+2. Duration (tie-breaker + budget gate) — Within the same priority, shorter tasks come first (t.duration). This is deliberate: fitting the short task first leaves more room, so more tasks fit overall. Duration also acts as a hard gate — generate_plan() only schedules a task if task.duration <= budget remaining.
+
+3. Time budget (Owner.minutes_available) — The scheduler is greedy against a fixed minutes budget; once it runs out, remaining tasks go to skipped rather than being crammed in.
+
+4. Completion status — Already-completed tasks are filtered out (if not t.completed) so they don't consume budget.
+
+5. Time-of-day (time) and due date — Used by sort_by_time() and conflict_warnings(), but note: these currently drive display and warnings, not the plan itself. The greedy fitter doesn't yet reorder around clock conflicts.
+
+6. Preferences — Owner.preferences exists in the model but the scheduler does not read it yet. Honest gap worth naming in your reflection.
+
 - How did you decide which constraints mattered most?
+
+Priority is first because skipping a pet's medication is worse than skipping a play session. Duration is second and only as a tie-breaker, chosen to maximize task count within the budget rather than to honor a specific clock schedule.
 
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
+
+The most important trade-off is that the scheduler optimizes how many important tasks fit, not when they happen. That's why time and preferences are tracked but not enforced.
+
 - Why is that tradeoff reasonable for this scenario?
+
+This tradeoff is reasonable because for a busy owner the priority is making sure the essential care tasks (like medication and walks) actually get done within their limited time, not that they happen at an exact minute. 
 
 ---
 

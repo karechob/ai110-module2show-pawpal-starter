@@ -28,6 +28,10 @@ def main() -> None:
                        time="19:30", due_date=today))
     milo.add_task(Task("Give medication", "meds", duration=5, priority=5,
                        time="08:15", frequency="daily", due_date=today))
+    # Two tasks booked for the SAME time (08:00) on different pets — the
+    # scheduler should warn that Miranda can't be in two places at once.
+    milo.add_task(Task("Breakfast", "feeding", duration=10, priority=4,
+                       time="08:00", due_date=today))
 
     scheduler = Scheduler()
     # Build the pet index up front so filtering by pet works before planning.
@@ -42,13 +46,13 @@ def main() -> None:
         print(f"  {t.time}  [{scheduler.pet_by_task[t.id]}] {t.name}"
               f" — {t.duration} min{repeats}")
 
-    # 5. Conflict detection: flag any of today's tasks whose times overlap.
-    conflicts = scheduler.detect_conflicts(owner.all_tasks())
+    # 5. Conflict detection: print a warning for any overlapping tasks
+    #    (same pet or different pets) without crashing the program.
     print("\nTime conflicts:")
-    if conflicts:
-        for earlier, later in conflicts:
-            print(f"  ! {earlier.name} ({earlier.time}) overlaps"
-                  f" {later.name} ({later.time})")
+    warnings = scheduler.conflict_warnings(owner.all_tasks())
+    if warnings:
+        for warning in warnings:
+            print(f"  {warning}")
     else:
         print("  none 🎉")
 

@@ -250,6 +250,25 @@ class Scheduler:
                     conflicts.append((earlier, later))
         return conflicts
 
+    def conflict_warnings(self, tasks: list[Task]) -> list[str]:
+        """Return human-readable warnings for any overlapping tasks.
+
+        A "lightweight" check: it never raises. Each overlap becomes one warning
+        string that names the pet(s) involved and both task times; an empty list
+        means the day is clear. Works for two tasks on the same pet *or* on
+        different pets (e.g. both need you at 08:00).
+        """
+        warnings: list[str] = []
+        for earlier, later in self.detect_conflicts(tasks):
+            pet_a = self.pet_by_task.get(earlier.id, "?")
+            pet_b = self.pet_by_task.get(later.id, "?")
+            who = pet_a if pet_a == pet_b else f"{pet_a} & {pet_b}"
+            warnings.append(
+                f"⚠️  Conflict ({who}): '{earlier.name}' at {earlier.time} "
+                f"({earlier.duration} min) overlaps '{later.name}' at {later.time}."
+            )
+        return warnings
+
     @staticmethod
     def _to_minutes(hhmm: str) -> int:
         """Convert an "HH:MM" time string to minutes past midnight."""
