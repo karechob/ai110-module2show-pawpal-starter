@@ -72,8 +72,9 @@ This tradeoff is reasonable because for a busy owner the priority is making sure
 **b. Judgment and verification**
 
 - Describe one moment where you did not accept an AI suggestion as-is.
+When refactoring, the logic was too complex to follow for the generate_schedule() section.
 - How did you evaluate or verify what the AI suggested?
-
+I evaluated it by the referencing the guidelines and the stated complexity needed for the project.
 ---
 
 ## 4. Testing and Verification
@@ -81,13 +82,16 @@ This tradeoff is reasonable because for a busy owner the priority is making sure
 **a. What you tested**
 
 - What behaviors did you test?
+I tested for tasks completions, adding tasks with pets, chronological scheduling, recurring daily tasks and, conflict detection.
 - Why were these tests important?
+These tests are important because they verify that the core features of the pet scheduling system work correctly and continue working after changes are made to the code.
 
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
+I'm more confident it works on the backend however, I'm not too confident on the streamlit side since I'm not familiar with it.
 - What edge cases would you test next if you had more time?
-
+I would like to test for more complex schedules, like multiple pets and conflicting prioritized activities.
 ---
 
 ## 5. Reflection
@@ -95,11 +99,15 @@ This tradeoff is reasonable because for a busy owner the priority is making sure
 **a. What went well**
 
 - What part of this project are you most satisfied with?
+I enjoyed working on the backend section, there are many different moving parts and it was more complex than what I thought at first.
 
 **b. What you would improve**
 
 - If you had another iteration, what would you improve or redesign?
+I would spend more time working on the streamlit section of the project to create a better UI and also to add more features.
 
 **c. Key takeaway**
 
 - What is one important thing you learned about designing systems or working with AI on this project?
+
+I learned that AI is there to guide you when you're stuck and that it’s best to test multiple ideas instead of being too focused on one way to approach the problem. My first UML diagram was too convoluted, and I spent too much time trying to figure out how to connect all the information. I realized that if I had just  used AI to help me clean up my original diagram, I could’ve saved a lot of time. 
