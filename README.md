@@ -48,13 +48,43 @@ Paste a sample of your app's CLI or Streamlit output here so a reader can see wh
 
 ```
 ========================================
+All tasks for Miranda, sorted by time
+========================================
+  08:00  [Rex] Morning walk — 30 min (recurring)
+  08:00  [Milo] Breakfast — 10 min
+  08:15  [Milo] Give medication — 5 min (recurring)
+  12:15  [Rex] Fetch training — 20 min (recurring)
+  18:00  [Rex] Dinner — 10 min
+  19:30  [Milo] Laser play — 45 min
+
+Time conflicts:
+  ⚠️  Conflict (Rex & Milo): 'Morning walk' at 08:00 (30 min) overlaps 'Breakfast' at 08:00.
+
+Completed 'Give medication' (due 2026-07-07).
+  → auto-scheduled next 'Give medication' for 2026-07-08
+
+Rex's tasks only:
+  • Dinner (feeding)
+  • Morning walk (walk)
+  • Fetch training (enrichment)
+
+Still to do (not completed) across all pets:
+  • [Rex] Dinner
+  • [Rex] Morning walk
+  • [Rex] Fetch training
+  • [Milo] Laser play
+  • [Milo] Breakfast
+  • [Milo] Give medication
+
+========================================
 Today's Schedule for Miranda
 Time available: 90 minutes
 ========================================
-Scheduled 4 task(s) using 65 minute(s):
+Scheduled 5 task(s) using 75 minute(s):
   • [Milo] Give medication (meds) — 5 min, priority 5
   • [Rex] Morning walk (walk) — 30 min, priority 5
   • [Rex] Dinner (feeding) — 10 min, priority 4
+  • [Milo] Breakfast (feeding) — 10 min, priority 4
   • [Rex] Fetch training (enrichment) — 20 min, priority 2
 Skipped 1 task(s) that didn't fit the time budget:
   • [Milo] Laser play (enrichment) — 45 min, priority 1
@@ -111,10 +141,9 @@ tests/test_pawpal.py::test_detect_conflicts_flags_duplicate_times PASSED [100%]
 
 Describe your app in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Add your owner information
+2. Add your pet information
+3. Add your task information
+4. Generate a schedule
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->
